@@ -3,6 +3,7 @@ package net.javaguides.employee.service.impl;
 import lombok.RequiredArgsConstructor;
 import net.javaguides.employee.dto.DepartmentDto;
 import net.javaguides.employee.entity.Department;
+import net.javaguides.employee.mapper.DepartmentMapper;
 import net.javaguides.employee.repository.DepartmentRepository;
 import net.javaguides.employee.service.DepartmentService;
 import org.springframework.stereotype.Service;
@@ -24,17 +25,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto createDepartment(final DepartmentDto departmentDto) {
-        final Department department = Department.builder()
-                .departmentName(departmentDto.departmentName())
-                .departmentDescription(departmentDto.departmentDescription())
-                .build();
 
+        final Department department = DepartmentMapper.toDepartment(departmentDto);
         final Department savedDepartment = departmentRepository.save(department);
 
-        return new DepartmentDto(
-                savedDepartment.getId(),
-                savedDepartment.getDepartmentName(),
-                savedDepartment.getDepartmentDescription()
-        );
+        return DepartmentMapper.toDepartmentDto(savedDepartment);
     }
 }
