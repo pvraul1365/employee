@@ -3,6 +3,7 @@ package net.javaguides.employee.service.impl;
 import lombok.RequiredArgsConstructor;
 import net.javaguides.employee.dto.DepartmentDto;
 import net.javaguides.employee.entity.Department;
+import net.javaguides.employee.exception.ResourceNotFoundException;
 import net.javaguides.employee.mapper.DepartmentMapper;
 import net.javaguides.employee.repository.DepartmentRepository;
 import net.javaguides.employee.service.DepartmentService;
@@ -31,4 +32,14 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         return DepartmentMapper.toDepartmentDto(savedDepartment);
     }
+
+    @Override
+    public DepartmentDto getDepartmentById(final Long id) {
+
+        final Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
+
+        return DepartmentMapper.toDepartmentDto(department);
+    }
+
 }

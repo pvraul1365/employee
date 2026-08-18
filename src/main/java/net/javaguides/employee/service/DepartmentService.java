@@ -6,4 +6,6 @@ public interface DepartmentService {
 
     DepartmentDto createDepartment(DepartmentDto departmentDto);
 
+    DepartmentDto getDepartmentById(Long id);
+
 }

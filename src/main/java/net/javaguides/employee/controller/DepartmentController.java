@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.javaguides.employee.dto.DepartmentDto;
 import net.javaguides.employee.service.DepartmentService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * DepartmentController
@@ -32,6 +29,13 @@ public class DepartmentController {
 
         return ResponseEntity.created(URI.create("/api/v1/departments/" + createdDepartment.id()))
                 .body(createdDepartment);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable final Long id) {
+        final DepartmentDto departmentDto = departmentService.getDepartmentById(id);
+
+        return ResponseEntity.ok(departmentDto);
     }
 
 }
