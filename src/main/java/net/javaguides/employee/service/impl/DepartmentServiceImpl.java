@@ -9,6 +9,8 @@ import net.javaguides.employee.repository.DepartmentRepository;
 import net.javaguides.employee.service.DepartmentService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * DepartmentServiceImpl
  * <p>
@@ -40,6 +42,14 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
         return DepartmentMapper.toDepartmentDto(department);
+    }
+
+    @Override
+    public List<DepartmentDto> getAllDepartments() {
+
+        return departmentRepository.findAll().stream()
+                .map(DepartmentMapper::toDepartmentDto)
+                .toList();
     }
 
 }

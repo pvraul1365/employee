@@ -1,6 +1,8 @@
 package net.javaguides.employee.controller;
 
 import java.net.URI;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import net.javaguides.employee.dto.DepartmentDto;
 import net.javaguides.employee.service.DepartmentService;
@@ -36,6 +38,13 @@ public class DepartmentController {
         final DepartmentDto departmentDto = departmentService.getDepartmentById(id);
 
         return ResponseEntity.ok(departmentDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
+        final List<DepartmentDto> departments = departmentService.getAllDepartments();
+
+        return ResponseEntity.ok(departments);
     }
 
 }
