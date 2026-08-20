@@ -33,7 +33,8 @@ public class DepartmentMapper {
         return new Department(
                 departmentDto.id(),
                 departmentDto.departmentName(),
-                departmentDto.departmentDescription());
+                departmentDto.departmentDescription(),
+                null);
     }
 
 }
