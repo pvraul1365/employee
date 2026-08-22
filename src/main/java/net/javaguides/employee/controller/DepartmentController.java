@@ -29,7 +29,7 @@ public class DepartmentController {
     public ResponseEntity<DepartmentDto> createDepartment(@RequestBody final DepartmentDto departmentDto) {
         final DepartmentDto createdDepartment = departmentService.createDepartment(departmentDto);
 
-        return ResponseEntity.created(URI.create("/api/v1/departments/" + createdDepartment.id()))
+        return ResponseEntity.created(URI.create("/api/v1/departments/" + createdDepartment.getId()))
                 .body(createdDepartment);
     }
 

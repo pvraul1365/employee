@@ -1,15 +1,14 @@
 package net.javaguides.employee.service.impl;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.javaguides.employee.dto.DepartmentDto;
 import net.javaguides.employee.entity.Department;
 import net.javaguides.employee.exception.ResourceNotFoundException;
-import net.javaguides.employee.mapper.DepartmentMapper;
 import net.javaguides.employee.repository.DepartmentRepository;
 import net.javaguides.employee.service.DepartmentService;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * DepartmentServiceImpl
@@ -25,14 +24,15 @@ import java.util.List;
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public DepartmentDto createDepartment(final DepartmentDto departmentDto) {
 
-        final Department department = DepartmentMapper.toDepartment(departmentDto);
+        final Department department = modelMapper.map(departmentDto, Department.class);
         final Department savedDepartment = departmentRepository.save(department);
 
-        return DepartmentMapper.toDepartmentDto(savedDepartment);
+        return modelMapper.map(savedDepartment, DepartmentDto.class);
     }
 
     @Override
@@ -41,14 +41,14 @@ public class DepartmentServiceImpl implements DepartmentService {
         final Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
-        return DepartmentMapper.toDepartmentDto(department);
+        return modelMapper.map(department, DepartmentDto.class);
     }
 
     @Override
     public List<DepartmentDto> getAllDepartments() {
 
         return departmentRepository.findAll().stream()
-                .map(DepartmentMapper::toDepartmentDto)
+                .map(department -> modelMapper.map(department, DepartmentDto.class))
                 .toList();
     }
 
@@ -58,12 +58,12 @@ public class DepartmentServiceImpl implements DepartmentService {
         final Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
-        department.setDepartmentName(departmentDto.departmentName());
-        department.setDepartmentDescription(departmentDto.departmentDescription());
+        department.setDepartmentName(departmentDto.getDepartmentName());
+        department.setDepartmentDescription(departmentDto.getDepartmentDescription());
 
         final Department updatedDepartment = departmentRepository.save(department);
 
-        return DepartmentMapper.toDepartmentDto(updatedDepartment);
+        return modelMapper.map(updatedDepartment, DepartmentDto.class);
     }
 
     @Override

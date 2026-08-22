@@ -1,8 +1,18 @@
 package net.javaguides.employee.dto;
 
-public record DepartmentDto(
-        Long id,
-        String departmentName,
-        String departmentDescription
-) {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class DepartmentDto {
+    private Long id;
+    private String departmentName;
+    private String departmentDescription;
 }
