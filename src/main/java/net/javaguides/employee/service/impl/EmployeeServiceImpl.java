@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.javaguides.employee.dto.EmployeeDto;
 import net.javaguides.employee.entity.Department;
 import net.javaguides.employee.entity.Employee;
+import net.javaguides.employee.exception.BadRequestException;
 import net.javaguides.employee.exception.ResourceNotFoundException;
 import net.javaguides.employee.repository.DepartmentRepository;
 import net.javaguides.employee.repository.EmployeeRepository;
@@ -33,6 +34,22 @@ public class EmployeeServiceImpl implements EmployeeService {
         final Employee savedEmployee = employeeRepository.save(employee);
         
         return modelMapper.map(savedEmployee, EmployeeDto.class);
+    }
+
+    @Override
+    public EmployeeDto getEmployeeById(final Long departmentId, final Long employeeId) {
+
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + departmentId));
+
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
+
+        if (!employee.getDepartment().getId().equals(department.getId())) {
+            throw new BadRequestException("Employee does not belong to department with id: " + departmentId);
+        }
+
+        return modelMapper.map(employee, EmployeeDto.class);
     }
 
 }
