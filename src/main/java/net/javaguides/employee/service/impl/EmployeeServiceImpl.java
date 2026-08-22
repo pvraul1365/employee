@@ -1,5 +1,6 @@
 package net.javaguides.employee.service.impl;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.javaguides.employee.dto.EmployeeDto;
 import net.javaguides.employee.entity.Department;
@@ -50,6 +51,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         return modelMapper.map(employee, EmployeeDto.class);
+    }
+
+    @Override
+    public List<EmployeeDto> getEmployeeByDepartmentId(final Long departmentId) {
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + departmentId));
+
+        List<Employee> employees = employeeRepository.findByDepartmentId(departmentId);
+
+        return employees.stream()
+                .map(employee -> modelMapper.map(employee, EmployeeDto.class))
+                .toList();
     }
 
 }

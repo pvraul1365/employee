@@ -1,6 +1,7 @@
 package net.javaguides.employee.controller;
 
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.javaguides.employee.dto.EmployeeDto;
 import net.javaguides.employee.service.EmployeeService;
@@ -46,6 +47,14 @@ public class EmployeeController {
         EmployeeDto employeeDto = employeeService.getEmployeeById(departmentId, employeeId);
 
         return ResponseEntity.ok(employeeDto);
+    }
+
+    @GetMapping("/{departmentId}/employees")
+    public ResponseEntity<List<EmployeeDto>> getEmployeesByDepartmentId(@PathVariable final Long departmentId) {
+        // Call the service method to get employees by department ID
+        List<EmployeeDto> employeeDtos = employeeService.getEmployeeByDepartmentId(departmentId);
+
+        return ResponseEntity.ok(employeeDtos);
     }
 
 }
