@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +34,7 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDto> createEmployee(@PathVariable final Long departmentId,
                                                @RequestBody final EmployeeDto employeeDto) {
         // Call the service method to create an employee
-        EmployeeDto savedEmployee = employeeService.createEmployee(departmentId, employeeDto);
+        final EmployeeDto savedEmployee = employeeService.createEmployee(departmentId, employeeDto);
 
         return ResponseEntity
                 .created(URI.create("/api/v1/departments/" + departmentId + "/employees/" + savedEmployee.getId()))
@@ -44,7 +45,7 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable final Long departmentId,
                                                        @PathVariable final Long employeeId) {
         // Call the service method to get an employee by ID
-        EmployeeDto employeeDto = employeeService.getEmployeeById(departmentId, employeeId);
+        final EmployeeDto employeeDto = employeeService.getEmployeeById(departmentId, employeeId);
 
         return ResponseEntity.ok(employeeDto);
     }
@@ -52,9 +53,18 @@ public class EmployeeController {
     @GetMapping("/{departmentId}/employees")
     public ResponseEntity<List<EmployeeDto>> getEmployeesByDepartmentId(@PathVariable final Long departmentId) {
         // Call the service method to get employees by department ID
-        List<EmployeeDto> employeeDtos = employeeService.getEmployeeByDepartmentId(departmentId);
+        final List<EmployeeDto> employeeDtos = employeeService.getEmployeeByDepartmentId(departmentId);
 
         return ResponseEntity.ok(employeeDtos);
     }
 
+    @PutMapping("/{departmentId}/employees/{employeeId}")
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable final Long departmentId,
+                                                      @PathVariable final Long employeeId,
+                                                      @RequestBody final EmployeeDto employeeDto) {
+        // Call the service method to update an employee
+        final EmployeeDto updatedEmployee = employeeService.updateEmployee(departmentId, employeeId, employeeDto);
+
+        return ResponseEntity.ok(updatedEmployee);
+    }
 }

@@ -33,17 +33,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDepartment(department);
 
         final Employee savedEmployee = employeeRepository.save(employee);
-        
+
         return modelMapper.map(savedEmployee, EmployeeDto.class);
     }
 
     @Override
     public EmployeeDto getEmployeeById(final Long departmentId, final Long employeeId) {
 
-        Department department = departmentRepository.findById(departmentId)
+        final Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + departmentId));
 
-        Employee employee = employeeRepository.findById(employeeId)
+        final Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
 
         if (!employee.getDepartment().getId().equals(department.getId())) {
@@ -55,14 +55,37 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDto> getEmployeeByDepartmentId(final Long departmentId) {
-        Department department = departmentRepository.findById(departmentId)
+        final Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + departmentId));
 
-        List<Employee> employees = employeeRepository.findByDepartmentId(departmentId);
+        final List<Employee> employees = employeeRepository.findByDepartmentId(departmentId);
 
         return employees.stream()
                 .map(employee -> modelMapper.map(employee, EmployeeDto.class))
                 .toList();
+    }
+
+    @Override
+    public EmployeeDto updateEmployee(final Long departmentId, final Long employeeId,
+                                      final EmployeeDto employeeDto) {
+
+        final Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + departmentId));
+
+        final Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + employeeId));
+
+        if (!employee.getDepartment().getId().equals(department.getId())) {
+            throw new BadRequestException("Employee does not belong to department with id: " + departmentId);
+        }
+
+        employee.setFirstName(employeeDto.getFirstName());
+        employee.setLastName(employeeDto.getLastName());
+        employee.setEmail(employeeDto.getEmail());
+
+        final Employee updatedEmployee = employeeRepository.save(employee);
+
+        return modelMapper.map(updatedEmployee, EmployeeDto.class);
     }
 
 }
